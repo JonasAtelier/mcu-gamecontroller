@@ -12,7 +12,8 @@
 # esp_hid are always required, as esp-ps-controller did, and build to
 # little without Bluetooth on.
 set(srcs "src/gamecontroller.c" "src/gamecontroller_log.c"
-         "src/gamecontroller_port_esp.c" "src/ps_reports.c")
+         "src/gamecontroller_port_esp.c" "src/ps_reports.c"
+         "src/gamecontroller_bt.c")
 
 if(CONFIG_GAMECONTROLLER AND NOT CONFIG_GAMECONTROLLER_DS4 AND
    NOT CONFIG_GAMECONTROLLER_DS5 AND NOT CONFIG_GAMECONTROLLER_XBOX)
