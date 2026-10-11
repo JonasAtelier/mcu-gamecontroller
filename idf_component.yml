@@ -1,0 +1,6 @@
+version: "0.1.0"
+description: mcu-gamecontroller game controller subsystem for ESP-IDF and STM32 HAL - DualShock 4 and DualSense over Bluetooth Classic, Xbox Wireless Controller over BLE.
+license: MIT
+dependencies:
+  idf:
+    version: ">=5.2"

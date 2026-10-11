@@ -1,0 +1,17 @@
+# ESP-IDF builds of examples/esp/
+build/
+sdkconfig
+sdkconfig.old
+managed_components/
+dependencies.lock
+docs/*.pdf
+test/test_ds4
+test/test_ds5
+test/test_xbox
+test/test_math
+test/test_reports
+test/esp/test_core
+test/esp/test_bt
+test/esp/test_port_esp
+test/stm/test_core
+test/stm/test_port_stm

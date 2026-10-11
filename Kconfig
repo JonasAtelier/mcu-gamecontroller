@@ -1,0 +1,58 @@
+# Read by ESP-IDF as a component Kconfig, and by both forges' `make menu`
+# (scripts/menu.py) for the GAMECONTROLLER_<PAD> prompts. stm-forge has no
+# Kconfig build step: its build only sees the defconfig lines, as
+# -DCONFIG_GAMECONTROLLER_<PAD>=1 or 0, and builds the pads' report parsers
+# only -- the STM32 HAL has no Bluetooth transport here. Every pad is off
+# unless set.
+menuconfig GAMECONTROLLER
+    bool "Game controller subsystem"
+    default y
+    help
+        The game controller core: struct gamecontroller_dev, the normalised
+        struct gamecontroller_state, rumble and lights, and the
+        gamecontroller_* log helpers. Pick the pads you need below; none is
+        built by default.
+
+if GAMECONTROLLER
+
+    config GAMECONTROLLER_DS4
+        bool "Sony DualShock 4 (Bluetooth Classic)"
+        depends on SOC_BT_CLASSIC_SUPPORTED
+        default n
+        help
+            The DualShock 4: its report parser, and with Bluetooth Classic
+            HID host on, the pad over gamecontroller_bt_start(). Bluetooth
+            Classic exists on the ESP32 only.
+
+    config GAMECONTROLLER_DS5
+        bool "Sony DualSense (Bluetooth Classic)"
+        depends on SOC_BT_CLASSIC_SUPPORTED
+        default n
+        help
+            The DualSense: as the DualShock 4, plus player LEDs and the
+            mute button.
+
+    config GAMECONTROLLER_XBOX
+        bool "Xbox Wireless Controller (BLE, unverified on hardware)"
+        depends on SOC_BLE_SUPPORTED
+        default n
+        help
+            Xbox Wireless Controllers on their Bluetooth LE firmware
+            (models 1708, 1797, 1914): the report parser, and with BLE on,
+            the pad over gamecontroller_bt_start(). Written from documents
+            only; never run on a pad.
+
+    config GAMECONTROLLER_MAX_PADS
+        int "Pads connected at once"
+        range 1 4
+        default 1
+
+    config GAMECONTROLLER_DEBUG
+        bool "gamecontroller_dbg() lines"
+        default n
+        help
+            STM32 HAL only: compile gamecontroller_dbg() lines in. On
+            ESP-IDF gamecontroller_dbg() is ESP_LOGD and the log level
+            decides.
+
+endif # GAMECONTROLLER
