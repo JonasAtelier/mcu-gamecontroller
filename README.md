@@ -30,23 +30,69 @@ directory `gamecontroller` as well.
 > of the Bluetooth stack. Nothing here has run with a pad -- and the **Xbox
 > pad is written from documents alone**.
 
-[Supported hardware](#supported-hardware) · [Install](#install) ·
+[Supported hardware](#supported-hardware) · [Drivers](#drivers) ·
+[Install](#install) ·
 [Quick start](#quick-start) · [Examples](#examples) ·
 [Documentation](#documentation) · [Tests](#tests)
 
 ## Supported hardware
 
-| Pad | Transport | Chips | Outputs |
-|---|---|---|---|
-| **DualShock 4** (PS4) | Bluetooth Classic HID | ESP32 only | rumble, light bar |
-| **DualSense** (PS5) | Bluetooth Classic HID | ESP32 only | rumble, light bar, player LEDs |
-| **Xbox Wireless Controller**, BLE firmware (models 1708, 1797, 1914) -- **unverified** | Bluetooth LE HID | any ESP with BLE: ESP32, S3, C3, C6, ... | rumble |
+| Pad | Transport | Notes |
+|---|---|---|
+| **DualShock 4** (PS4) | Bluetooth Classic HID | Sony PS4 pad |
+| **DualSense** (PS5) | Bluetooth Classic HID | Sony PS5 pad |
+| **Xbox Wireless Controller**, BLE firmware (models 1708, 1797, 1914) -- **unverified** | Bluetooth LE HID | Microsoft pad |
 
 Bluetooth Classic exists on the ESP32 alone (`SOC_BT_CLASSIC_SUPPORTED`),
 so the PlayStation pads need a plain ESP32; the ESP32-S3 boards of this
 workspace can take only the Xbox pad. **The STM32 HAL has no Bluetooth
 transport here**: it builds the core and the pads' report parsers and
 output builders, for an app that brings the reports some other way.
+
+## Drivers
+
+<details><summary><b>DualShock 4</b> (PS4) — Bluetooth Classic HID</summary>
+
+- Chips: ESP32 only
+- Outputs: rumble, light bar
+- Example: [ps_controller](examples/esp/ps_controller/) (ESP32):
+  esp-ps-controller's own example, unchanged, now with its Bluetooth settings
+- Example: [gamecontroller](examples/esp/gamecontroller/) (ESP32): any pad;
+  rumble and light bar from buttons
+- Example: [parsers](examples/stm/parsers/main.c) (STM32): the report parser
+  and builder, fed by the app's own transport
+- Chip reference: [DualShock 4](docs/chips.md#dualshock-4)
+
+</details>
+
+<details><summary><b>DualSense</b> (PS5) — Bluetooth Classic HID</summary>
+
+- Chips: ESP32 only
+- Outputs: rumble, light bar, player LEDs
+- Example: [ps_controller](examples/esp/ps_controller/) (ESP32):
+  esp-ps-controller's own example, unchanged, now with its Bluetooth settings
+- Example: [gamecontroller](examples/esp/gamecontroller/) (ESP32): any pad;
+  rumble and light bar from buttons
+- **Rumble is the classic kind** on the DualSense, the same on every
+  firmware; see [the chip reference](docs/chips.md#rumble).
+- Chip reference: [DualSense](docs/chips.md#dualsense)
+
+</details>
+
+<details><summary><b>Xbox Wireless Controller</b> — Bluetooth LE HID</summary>
+
+BLE firmware (models 1708, 1797, 1914) -- **unverified**.
+
+- Chips: any ESP with BLE: ESP32, S3, C3, C6, ...
+- Outputs: rumble
+- Example: [gamecontroller](examples/esp/gamecontroller/) (ESP32): any pad;
+  rumble and light bar from buttons
+- Example: [xbox](examples/esp/xbox/) (ESP32-S3): an Xbox pad over BLE
+  (unverified)
+- Chip reference: [Xbox Wireless Controller
+  (unverified)](docs/chips.md#xbox-wireless-controller-unverified)
+
+</details>
 
 ## Install
 
@@ -127,12 +173,7 @@ if (gamecontroller_pressed(&s, GAMECONTROLLER_BTN_SOUTH))   /* Cross, A */
 
 ## Examples
 
-| Example | Chip | What |
-|---|---|---|
-| [ps_controller](examples/esp/ps_controller/) | ESP32 | esp-ps-controller's own example, unchanged, now with its Bluetooth settings |
-| [gamecontroller](examples/esp/gamecontroller/) | ESP32 | any pad; rumble and light bar from buttons |
-| [xbox](examples/esp/xbox/) | ESP32-S3 | an Xbox pad over BLE (unverified) |
-| [parsers](examples/stm/parsers/main.c) | STM32 | the report parser and builder, fed by the app's own transport |
+Each driver's examples are listed under [Drivers](#drivers).
 
 ESP-IDF examples locate this library through `EXTRA_COMPONENT_DIRS`, which
 assumes the repository is checked out as `gamecontroller`. With ESP-IDF
@@ -147,8 +188,6 @@ idf.py build
 
 - **One report at a time**: no touchpad points, motion sensors, audio,
   adaptive triggers or paddles.
-- **Rumble is the classic kind** on the DualSense, the same on every
-  firmware; see [the chip reference](docs/chips.md#rumble).
 - **Up to four pads** at once (`CONFIG_GAMECONTROLLER_MAX_PADS`, default 1).
 - **Bluetooth is RAM-hungry**: Bluedroid with Classic, BLE and the HID host
   on one ESP32 costs tens of kilobytes.
