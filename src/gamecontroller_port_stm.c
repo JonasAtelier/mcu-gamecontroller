@@ -12,13 +12,13 @@
 
 /*
  * The core is always built; each pad's parser only under its own option.
- * With the library on and no pad picked, say so -- stm-forge compiles this
- * file only when PKG_gamecontroller = y, so this is the CMakeLists' "on, no
- * pad" warning on the ESP-IDF side.
+ * With the library built and no pad picked, say so: this file is compiled
+ * only when the library is, so this is the CMakeLists' "no pad" warning for
+ * every build that never reads that file (stm-forge, a hand-made project).
  */
 #if !(CONFIG_GAMECONTROLLER_DS4 || CONFIG_GAMECONTROLLER_DS5 || \
       CONFIG_GAMECONTROLLER_XBOX)
-#warning "gamecontroller: no pad is selected; set GAMECONTROLLER_<PAD> = y under PKG_gamecontroller = y (or -DCONFIG_GAMECONTROLLER_<PAD>=1)"
+#warning "gamecontroller: no pad is selected; define CONFIG_GAMECONTROLLER_<PAD>=1 (stm-forge: GAMECONTROLLER_<PAD> = y)"
 #endif
 
 #if defined(HAL_I2C_MODULE_ENABLED) || defined(HAL_SPI_MODULE_ENABLED) || \

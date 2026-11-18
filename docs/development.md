@@ -39,7 +39,8 @@ examples/
   stm/parsers/              the parser and builder on their own
 docs/                       the five guides
 assets/                     README photo
-CMakeLists.txt              ESP-IDF only; stm-forge globs src/**/*.c instead
+CMakeLists.txt              ESP-IDF component; elsewhere a static library for add_subdirectory(); stm-forge globs src/**/*.c instead
+                            the static library's options are Kconfig's bool entries, found by the type line directly under each `config`
 Kconfig                     GAMECONTROLLER and GAMECONTROLLER_<PAD>
 idf_component.yml           ESP-IDF component manifest
 ```
@@ -87,7 +88,9 @@ It is kept so the library has the same shape as the others.
 3. In `gamecontroller_bt.c`: know the pad in `identify()`, give it an ops
    table, set it up in `on_open()`, parse it in `on_input()`.
 4. `config GAMECONTROLLER_FOO` in `Kconfig`, depending on the SoC feature
-   its transport needs; its file in `CMakeLists.txt`; `# GAMECONTROLLER_FOO
+   its transport needs, with `bool` directly under the `config` line; its
+   file in `CMakeLists.txt` (its ESP-IDF part; the `add_subdirectory()` part
+   reads `Kconfig`); `# GAMECONTROLLER_FOO
    is not set` in both forges' defconfigs; vectors in `gen_vectors.py` and
    a `test_foo.c`.
 

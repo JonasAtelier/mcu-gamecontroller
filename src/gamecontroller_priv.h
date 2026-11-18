@@ -170,7 +170,17 @@ static inline esp_err_t gamecontroller_esp_err(int err)
 }
 
 #else /* STM32 HAL */
+/*
+ * Undefined, the include below fails with only
+ * `#include expects "FILENAME" or <FILENAME>`. Every library source that
+ * needs the HAL includes this header before any pad header, so one check
+ * here names the cause on every build route.
+ */
+#ifndef CMSIS_device_header
+#error "gamecontroller: CMSIS_device_header is not defined; define it as the STM32 family header, such as \"stm32f4xx.h\" (CMake: set(MCU_DEVICE_HEADER stm32f4xx.h))"
+#else
 #include CMSIS_device_header
+#endif /* CMSIS_device_header */
 
 #ifdef HAL_I2C_MODULE_ENABLED
 typedef I2C_HandleTypeDef *gamecontroller_i2c_bus;

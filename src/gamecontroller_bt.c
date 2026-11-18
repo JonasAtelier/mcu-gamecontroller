@@ -2,7 +2,7 @@
  * Pads over Bluetooth, through ESP-IDF's HID host (esp_hidh) on Bluedroid:
  * DS4 and DS5 over Bluetooth Classic, the Xbox pad over BLE. Also the
  * esp-ps-controller calls, ps_controller_*, over the first PlayStation pad.
- * ESP-IDF only; under stm-forge this file is empty.
+ * ESP-IDF only; off ESP-IDF this file is empty.
  */
 #include "gamecontroller_priv.h"
 

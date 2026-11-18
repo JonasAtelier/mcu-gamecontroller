@@ -3,7 +3,9 @@
 # Kconfig build step: its build only sees the defconfig lines, as
 # -DCONFIG_GAMECONTROLLER_<PAD>=1 or 0, and builds the pads' report parsers
 # only -- the STM32 HAL has no Bluetooth transport here. Every pad is off
-# unless set.
+# unless set. Outside ESP-IDF, CMakeLists.txt takes its options from the bool
+# entries here, found by their type line: keep `bool` directly under each
+# `config`.
 menuconfig GAMECONTROLLER
     bool "Game controller subsystem"
     default y
